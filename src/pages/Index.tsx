@@ -196,60 +196,67 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://i.imgur.com/rQ4IeCx.jpeg"
-            alt="Персональные подарки"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 z-10 text-center max-w-5xl">
-          <div className="space-y-8 animate-fade-in">
-            <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm text-lg px-6 py-2">
-              Более 20 000 проданных товаров
-            </Badge>
-            
-            <h2 className="text-5xl lg:text-7xl font-black text-white leading-tight tracking-tight">
-              Создаём персональные подарки, которые{" "}
-              <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-400 bg-clip-text text-transparent">
-                запоминаются
-              </span>
-            </h2>
-            
-            <p className="text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto font-light">
-              Индивидуальные подарки ручной работы с вашим дизайном
-            </p>
-            
-            <div className="pt-8">
-              <CountdownTimer />
-            </div>
-
-            <div className="pt-6 space-y-4">
-              <Button 
-                size="lg"
-                onClick={() => window.open('https://t.me/customLGHT', '_blank')}
-                className="bg-white text-black hover:bg-gray-100 font-bold text-lg px-12 py-7 rounded-full shadow-2xl hover:scale-105 transition-all"
-              >
-                Сделать индивидуальный заказ
-              </Button>
+      <section className="min-h-screen flex items-center pt-20 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8 animate-fade-in">
+              <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 text-lg px-6 py-2">
+                Более 20 000 проданных товаров
+              </Badge>
               
-              <p className="text-white/80 text-sm">
-                Напиши нашему менеджеру — <span className="font-semibold text-white">@customLGHT</span>
+              <h2 className="text-5xl lg:text-7xl font-black text-black leading-tight tracking-tight">
+                Создаём персональные подарки, которые{" "}
+                <span className="bg-gradient-to-r from-purple-600 via-cyan-500 to-pink-600 bg-clip-text text-transparent">
+                  запоминаются
+                </span>
+              </h2>
+              
+              <p className="text-xl lg:text-2xl text-gray-600 font-light">
+                Индивидуальные подарки ручной работы с вашим дизайном
               </p>
+              
+              <div className="pt-4">
+                <CountdownTimer />
+              </div>
+
+              <div className="pt-6 space-y-4">
+                <Button 
+                  size="lg"
+                  onClick={() => window.open('https://t.me/customLGHT', '_blank')}
+                  className="bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-700 hover:to-cyan-600 text-white font-bold text-lg px-12 py-7 rounded-full shadow-2xl hover:scale-105 transition-all"
+                >
+                  Сделать индивидуальный заказ
+                </Button>
+                
+                <p className="text-gray-600 text-sm">
+                  Напиши нашему менеджеру — <span className="font-semibold text-black">@customLGHT</span>
+                </p>
+              </div>
+
+              <div className="flex items-center gap-6 pt-4">
+                <div className="flex items-center gap-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Icon key={i} name="Star" className="text-yellow-400 fill-yellow-400" size={20} />
+                  ))}
+                  <span className="ml-2 font-bold text-black text-xl">4.7</span>
+                </div>
+                <div className="h-8 w-px bg-gray-300"></div>
+                <p className="text-gray-600 font-medium">Средняя оценка клиентов</p>
+              </div>
             </div>
 
-            <div className="flex items-center justify-center gap-6 pt-8">
-              <div className="flex items-center gap-2">
-                {[...Array(5)].map((_, i) => (
-                  <Icon key={i} name="Star" className="text-yellow-400 fill-yellow-400" size={20} />
-                ))}
-                <span className="ml-2 font-bold text-white text-xl">4.7</span>
+            <div className="relative animate-scale-in">
+              <img 
+                src="https://i.imgur.com/rQ4IeCx.jpeg"
+                alt="Персональные подарки"
+                className="rounded-3xl shadow-2xl w-full"
+              />
+              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl border border-gray-200">
+                <p className="text-sm text-gray-600 mb-1">Работаем более</p>
+                <p className="text-3xl font-black bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">
+                  3 лет
+                </p>
               </div>
-              <div className="h-8 w-px bg-white/30"></div>
-              <p className="text-white/90 font-medium">Средняя оценка клиентов</p>
             </div>
           </div>
         </div>
