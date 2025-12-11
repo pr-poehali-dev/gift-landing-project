@@ -2,7 +2,36 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const CountdownTimer = () => {
+  const [timeLeft, setTimeLeft] = useState(180);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) return 180;
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+
+  return (
+    <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-cyan-500 px-6 py-3 rounded-full shadow-2xl animate-glow">
+      <Icon name="Zap" className="text-white" size={20} />
+      <div className="text-white font-bold">
+        <span className="text-lg">
+          {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+        </span>
+        <span className="ml-2 text-sm font-normal">— Скидка 20% на первый заказ!</span>
+      </div>
+    </div>
+  );
+};
 
 const Index = () => {
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -19,7 +48,7 @@ const Index = () => {
       { threshold: 0.1 }
     );
 
-    const elements = document.querySelectorAll(".fade-in-on-scroll");
+    const elements = document.querySelectorAll(".fade-scroll");
     elements.forEach((el) => observerRef.current?.observe(el));
 
     return () => observerRef.current?.disconnect();
@@ -29,37 +58,42 @@ const Index = () => {
     {
       title: "Акриловые 3D ночники",
       price: "до 1990 ₽",
-      features: ["16 цветов свечения", "Пульт в комплекте", "Размер 15×20 см"],
+      features: ["16 цветов свечения", "Пульт в комплекте", "Размер 15×20 см", "Подарочная упаковка — 0 ₽"],
       icon: "Lightbulb",
-      gradient: "from-purple-500 to-pink-500"
+      image: "https://i.imgur.com/5Gnxgll.jpeg",
+      gradient: "from-purple-600 to-cyan-500"
     },
     {
       title: "Акриловые фигурки с УФ-печатью",
       price: "до 399 ₽",
-      features: ["Размер 15×20 см", "Яркие цвета", "Любой дизайн"],
+      features: ["Размер 15×20 см", "УФ-печать высокого качества", "Подарочная упаковка в комплекте"],
       icon: "Star",
-      gradient: "from-cyan-500 to-blue-500"
+      image: "https://i.imgur.com/RanEL4d.jpeg",
+      gradient: "from-cyan-500 to-purple-600"
     },
     {
       title: "Тафтинг-ковры ручного изготовления",
       price: "от 7000 ₽",
-      features: ["Размер 60×90 см", "Ручная работа", "Уникальный дизайн"],
+      features: ["Ручная работа", "Размер 60×90 см", "Уникальный дизайн"],
       icon: "Palette",
-      gradient: "from-pink-500 to-purple-500"
+      image: "https://i.imgur.com/85SSWMM.png",
+      gradient: "from-purple-600 to-pink-600"
     },
     {
-      title: "Кулоны из нержавейки с гравировкой",
+      title: "Кулоны с гравировкой",
       price: "790 ₽",
-      features: ["Любая надпись", "Цепочка в комплекте", "Долговечность"],
+      features: ["Любая надпись", "Цепочка в комплекте", "Нержавеющая сталь"],
       icon: "Heart",
-      gradient: "from-purple-500 to-cyan-500"
+      image: "https://i.imgur.com/4ZF6i5h.png",
+      gradient: "from-pink-600 to-cyan-500"
     },
     {
       title: "Акриловые топперы",
       price: "299 ₽",
       features: ["Для тортов и декора", "Любой текст", "Быстрое изготовление"],
       icon: "Cake",
-      gradient: "from-cyan-500 to-pink-500"
+      image: "https://i.imgur.com/sZzfEOU.jpeg",
+      gradient: "from-cyan-500 to-purple-600"
     }
   ];
 
@@ -72,12 +106,12 @@ const Index = () => {
     {
       icon: "Zap",
       title: "Быстрое производство",
-      description: "Изготовление за 1-3 дня"
+      description: "Изготовление за 1–3 дня"
     },
     {
       icon: "Gift",
       title: "Премиальная упаковка",
-      description: "Каждый товар в подарочной коробке"
+      description: "Подарочная коробка в комплекте"
     },
     {
       icon: "Truck",
@@ -89,18 +123,18 @@ const Index = () => {
   const steps = [
     {
       number: "01",
-      title: "Напишите нам в Telegram",
-      description: "Опишите, что хотите заказать"
+      title: "Вы оставляете заявку",
+      description: "Или пишете @customLGHT"
     },
     {
       number: "02",
-      title: "Согласуем макет",
-      description: "Вышлем дизайн для подтверждения"
+      title: "Разрабатываем дизайн",
+      description: "Ваш индивидуальный дизайн"
     },
     {
       number: "03",
-      title: "Получите подарок",
-      description: "Доставим курьером или почтой"
+      title: "Производим и доставляем",
+      description: "В подарочной коробке"
     }
   ];
 
@@ -119,138 +153,157 @@ const Index = () => {
     },
     {
       name: "Елена П.",
-      rating: 4,
+      rating: 5,
       text: "Тафтинг-ковёр превзошёл ожидания! Ручная работа видна в каждой детали. Рекомендую!",
       date: "2 недели назад"
     }
   ];
 
+  const gallery = [
+    "https://i.imgur.com/Vsgj6Le.png",
+    "https://i.imgur.com/qtQfzKm.png",
+    "https://i.imgur.com/BsYvZbj.png",
+    "https://i.imgur.com/6QAYZVq.png",
+    "https://i.imgur.com/mOWPtNK.png",
+    "https://i.imgur.com/klvqKn1.jpeg",
+    "https://i.imgur.com/UnX017M.jpeg",
+    "https://i.imgur.com/SqYdnOc.jpeg",
+    "https://i.imgur.com/bOzrpkx.jpeg",
+    "https://i.imgur.com/qHC5pAX.jpeg",
+    "https://i.imgur.com/c8xdpqI.jpeg",
+    "https://i.imgur.com/RtBfhlS.jpeg",
+    "https://i.imgur.com/veCinrr.jpeg",
+    "https://i.imgur.com/6EbC3Yk.jpeg",
+    "https://i.imgur.com/rQ4IeCx.jpeg",
+    "https://i.imgur.com/G28J96C.jpeg",
+    "https://i.imgur.com/U7QsPbh.jpeg"
+  ];
+
   return (
     <div className="min-h-screen bg-white">
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-cyan-500 to-pink-600 bg-clip-text text-transparent">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center max-w-7xl">
+          <h1 className="text-2xl font-black tracking-tight">
             ildamn
           </h1>
           <Button 
             onClick={() => window.open('https://t.me/customLGHT', '_blank')}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold"
+            className="bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-700 hover:to-cyan-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all"
           >
             <Icon name="Send" className="mr-2" size={18} />
-            Написать в Telegram
+            @customLGHT
           </Button>
         </div>
       </header>
 
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-gray-50 to-purple-50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200">
-                Более 20 000 проданных товаров
-              </Badge>
-              <h2 className="text-5xl lg:text-6xl font-bold leading-tight">
-                Создаём персональные подарки, которые{" "}
-                <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 bg-clip-text text-transparent">
-                  запоминаются
-                </span>
-              </h2>
-              <p className="text-xl text-gray-600">
-                Ночники, фигурки, ковры, украшения — всё с вашим дизайном. 
-                Изготовление за 1-3 дня. Упаковано в подарочную коробку.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button 
-                  size="lg"
-                  onClick={() => window.open('https://t.me/customLGHT', '_blank')}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold text-lg px-8 py-6 animate-glow"
-                >
-                  Сделать индивидуальный заказ
-                </Button>
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold text-lg px-8 py-6"
-                >
-                  Смотреть каталог
-                </Button>
-              </div>
-              <div className="flex items-center gap-6 pt-4">
-                <div className="flex -space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-white"></div>
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 border-2 border-white"></div>
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 border-2 border-white"></div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Icon key={i} name="Star" className="text-yellow-400 fill-yellow-400" size={16} />
-                    ))}
-                    <span className="ml-2 font-semibold text-gray-900">4.7</span>
-                  </div>
-                  <p className="text-sm text-gray-600">Средняя оценка клиентов</p>
-                </div>
-              </div>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://i.imgur.com/rQ4IeCx.jpeg"
+            alt="Персональные подарки"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 z-10 text-center max-w-5xl">
+          <div className="space-y-8 animate-fade-in">
+            <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm text-lg px-6 py-2">
+              Более 20 000 проданных товаров
+            </Badge>
+            
+            <h2 className="text-5xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+              Создаём персональные подарки, которые{" "}
+              <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-400 bg-clip-text text-transparent">
+                запоминаются
+              </span>
+            </h2>
+            
+            <p className="text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto font-light">
+              Индивидуальные подарки ручной работы с вашим дизайном
+            </p>
+            
+            <div className="pt-8">
+              <CountdownTimer />
             </div>
-            <div className="relative">
-              <img 
-                src="https://cdn.poehali.dev/projects/be5faa2d-5c70-480e-8c34-7a9bc9fce1e3/files/a317ebbf-25eb-42e0-a823-4ff433c0e10c.jpg"
-                alt="Персональные подарки"
-                className="rounded-3xl shadow-2xl w-full animate-scale-in"
-              />
-              <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-                <p className="text-sm text-gray-600 mb-1">Работаем более</p>
-                <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  3 лет
-                </p>
+
+            <div className="pt-6 space-y-4">
+              <Button 
+                size="lg"
+                onClick={() => window.open('https://t.me/customLGHT', '_blank')}
+                className="bg-white text-black hover:bg-gray-100 font-bold text-lg px-12 py-7 rounded-full shadow-2xl hover:scale-105 transition-all"
+              >
+                Сделать индивидуальный заказ
+              </Button>
+              
+              <p className="text-white/80 text-sm">
+                Напиши нашему менеджеру — <span className="font-semibold text-white">@customLGHT</span>
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-6 pt-8">
+              <div className="flex items-center gap-2">
+                {[...Array(5)].map((_, i) => (
+                  <Icon key={i} name="Star" className="text-yellow-400 fill-yellow-400" size={20} />
+                ))}
+                <span className="ml-2 font-bold text-white text-xl">4.7</span>
               </div>
+              <div className="h-8 w-px bg-white/30"></div>
+              <p className="text-white/90 font-medium">Средняя оценка клиентов</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="catalog" className="py-20 px-4">
+      <section className="py-32 px-4 bg-black text-white">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16 fade-in-on-scroll">
-            <Badge className="bg-cyan-100 text-cyan-700 hover:bg-cyan-200 mb-4">
+          <div className="text-center mb-20 fade-scroll">
+            <Badge className="bg-purple-600/20 text-purple-400 border-purple-600/30 mb-6 text-lg px-6 py-2">
               Наш каталог
             </Badge>
-            <h3 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h3 className="text-5xl lg:text-6xl font-black mb-6 tracking-tight">
               Что мы создаём
             </h3>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Каждый товар изготавливается индивидуально под ваш заказ
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {products.map((product, index) => (
               <Card 
                 key={index} 
-                className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-purple-200 fade-in-on-scroll overflow-hidden"
+                className="group bg-zinc-900 border-zinc-800 hover:border-purple-600/50 transition-all duration-500 hover:-translate-y-2 fade-scroll overflow-hidden"
               >
-                <div className={`h-3 bg-gradient-to-r ${product.gradient}`}></div>
-                <CardContent className="p-6">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${product.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon name={product.icon as any} className="text-white" size={32} />
+                <div className="relative h-80 overflow-hidden">
+                  <img 
+                    src={product.image} 
+                    alt={product.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${product.gradient} opacity-0 group-hover:opacity-30 transition-opacity duration-500`}></div>
+                </div>
+                <CardContent className="p-8">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-r ${product.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
+                    <Icon name={product.icon as any} className="text-white" size={28} />
                   </div>
-                  <h4 className="text-2xl font-bold mb-2 text-gray-900">
+                  <h4 className="text-2xl font-bold mb-3 text-white">
                     {product.title}
                   </h4>
-                  <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+                  <p className={`text-4xl font-black mb-6 bg-gradient-to-r ${product.gradient} bg-clip-text text-transparent`}>
                     {product.price}
                   </p>
-                  <ul className="space-y-2 mb-6">
+                  <ul className="space-y-3 mb-8">
                     {product.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-600">
-                        <Icon name="Check" className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <li key={i} className="flex items-start gap-2 text-gray-400">
+                        <Icon name="Check" className="text-cyan-500 mt-0.5 flex-shrink-0" size={18} />
                         <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <Button 
                     onClick={() => window.open('https://t.me/customLGHT', '_blank')}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                    className={`w-full bg-gradient-to-r ${product.gradient} hover:shadow-2xl hover:scale-105 transition-all text-white font-bold`}
                   >
                     Заказать
                   </Button>
@@ -258,13 +311,17 @@ const Index = () => {
               </Card>
             ))}
           </div>
+
+          <div className="text-center fade-scroll">
+            <CountdownTimer />
+          </div>
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-gradient-to-br from-purple-50 to-cyan-50">
+      <section className="py-32 px-4 bg-white">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16 fade-in-on-scroll">
-            <h3 className="text-4xl lg:text-5xl font-bold mb-4">
+          <div className="text-center mb-20 fade-scroll">
+            <h3 className="text-5xl lg:text-6xl font-black mb-6 tracking-tight">
               Почему выбирают нас
             </h3>
           </div>
@@ -272,15 +329,15 @@ const Index = () => {
             {benefits.map((benefit, index) => (
               <div 
                 key={index} 
-                className="text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 fade-in-on-scroll"
+                className="text-center p-10 bg-gray-50 rounded-3xl hover:bg-gray-100 transition-all hover:-translate-y-1 fade-scroll group"
               >
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
                   <Icon name={benefit.icon as any} className="text-white" size={36} />
                 </div>
                 <h4 className="text-xl font-bold mb-3 text-gray-900">
                   {benefit.title}
                 </h4>
-                <p className="text-gray-600">
+                <p className="text-gray-600 leading-relaxed">
                   {benefit.description}
                 </p>
               </div>
@@ -289,51 +346,49 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-16 fade-in-on-scroll">
-            <Badge className="bg-pink-100 text-pink-700 hover:bg-pink-200 mb-4">
+      <section className="py-32 px-4 bg-black text-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-20 fade-scroll">
+            <Badge className="bg-cyan-600/20 text-cyan-400 border-cyan-600/30 mb-6 text-lg px-6 py-2">
               Простой процесс
             </Badge>
-            <h3 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h3 className="text-5xl lg:text-6xl font-black mb-8 tracking-tight">
               Как сделать заказ
             </h3>
+            <div className="mt-8">
+              <CountdownTimer />
+            </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-12">
             {steps.map((step, index) => (
               <div 
                 key={index} 
-                className="relative fade-in-on-scroll"
+                className="relative fade-scroll text-center"
               >
-                <div className="bg-gradient-to-br from-purple-50 to-cyan-50 p-8 rounded-2xl border-2 border-purple-200 hover:border-purple-400 transition-colors">
-                  <div className="text-6xl font-bold text-purple-200 mb-4">
+                <div className="bg-zinc-900 p-10 rounded-3xl border border-zinc-800 hover:border-purple-600/50 transition-all h-full">
+                  <div className="text-7xl font-black text-purple-600/30 mb-6">
                     {step.number}
                   </div>
-                  <h4 className="text-2xl font-bold mb-3 text-gray-900">
+                  <h4 className="text-2xl font-bold mb-4 text-white">
                     {step.title}
                   </h4>
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-400 text-lg leading-relaxed">
                     {step.description}
                   </p>
                 </div>
-                {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                    <Icon name="ArrowRight" className="text-purple-300" size={32} />
-                  </div>
-                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-gray-50">
+      <section className="py-32 px-4 bg-gray-50">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16 fade-in-on-scroll">
-            <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-200 mb-4">
+          <div className="text-center mb-20 fade-scroll">
+            <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-200 mb-6 text-lg px-6 py-2">
               Отзывы клиентов
             </Badge>
-            <h3 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h3 className="text-5xl lg:text-6xl font-black mb-6 tracking-tight">
               Что о нас говорят
             </h3>
           </div>
@@ -341,30 +396,30 @@ const Index = () => {
             {reviews.map((review, index) => (
               <Card 
                 key={index} 
-                className="hover:shadow-xl transition-shadow fade-in-on-scroll"
+                className="hover:shadow-2xl transition-all fade-scroll border-2 hover:border-purple-200"
               >
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(review.rating)].map((_, i) => (
                       <Icon key={i} name="Star" className="text-yellow-400 fill-yellow-400" size={20} />
                     ))}
                   </div>
-                  <p className="text-gray-700 mb-4 text-lg">
+                  <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                     "{review.text}"
                   </p>
                   <div className="flex items-center justify-between">
-                    <p className="font-semibold text-gray-900">{review.name}</p>
+                    <p className="font-bold text-gray-900">{review.name}</p>
                     <p className="text-sm text-gray-500">{review.date}</p>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-          <div className="text-center mt-12 fade-in-on-scroll">
-            <div className="inline-flex items-center gap-4 bg-white px-8 py-4 rounded-full shadow-lg">
-              <Icon name="Star" className="text-yellow-400 fill-yellow-400" size={24} />
+          <div className="text-center mt-16 fade-scroll">
+            <div className="inline-flex items-center gap-4 bg-white px-10 py-6 rounded-full shadow-xl border-2 border-yellow-200">
+              <Icon name="Star" className="text-yellow-400 fill-yellow-400" size={32} />
               <div className="text-left">
-                <p className="font-bold text-2xl text-gray-900">4.7 из 5</p>
+                <p className="font-black text-3xl text-gray-900">4.7 из 5</p>
                 <p className="text-sm text-gray-600">Средняя оценка на маркетплейсах</p>
               </div>
             </div>
@@ -372,116 +427,141 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-4">
+      <section className="py-32 px-4 bg-black">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16 fade-in-on-scroll">
-            <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 mb-4">
+          <div className="text-center mb-20 fade-scroll">
+            <Badge className="bg-purple-600/20 text-purple-400 border-purple-600/30 mb-6 text-lg px-6 py-2">
               Галерея работ
             </Badge>
-            <h3 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h3 className="text-5xl lg:text-6xl font-black mb-6 text-white tracking-tight">
               Наши работы
             </h3>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="relative overflow-hidden rounded-2xl aspect-square group fade-in-on-scroll">
-              <img 
-                src="https://cdn.poehali.dev/projects/be5faa2d-5c70-480e-8c34-7a9bc9fce1e3/files/3ad4a8c7-1f63-4934-9baf-30b2df092426.jpg"
-                alt="Работа 1"
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-4 left-4 text-white">
-                  <p className="font-semibold">Акриловый ночник</p>
-                </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {gallery.map((img, index) => (
+              <div 
+                key={index} 
+                className="relative overflow-hidden rounded-2xl aspect-square group fade-scroll"
+              >
+                <img 
+                  src={img}
+                  alt={`Работа ${index + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-32 px-4 bg-gradient-to-br from-purple-600 via-cyan-500 to-purple-600">
+        <div className="container mx-auto max-w-5xl text-center text-white fade-scroll">
+          <h3 className="text-5xl lg:text-6xl font-black mb-8 tracking-tight">
+            Есть вопросы?
+          </h3>
+          <p className="text-2xl mb-12 opacity-90 font-light">
+            Нужна консультация или хотите обсудить индивидуальный заказ?
+          </p>
+          
+          <div className="mb-12">
+            <CountdownTimer />
+          </div>
+
+          <Button 
+            size="lg"
+            onClick={() => window.open('https://t.me/customLGHT', '_blank')}
+            className="bg-white text-black hover:bg-gray-100 font-bold text-xl px-16 py-8 rounded-full shadow-2xl hover:scale-105 transition-all"
+          >
+            <Icon name="Send" className="mr-3" size={24} />
+            Написать менеджеру @customLGHT
+          </Button>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 bg-black text-white">
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid md:grid-cols-4 gap-12 text-center fade-scroll">
+            <div>
+              <p className="text-5xl font-black bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-3">
+                3+
+              </p>
+              <p className="text-gray-400">Работаем более 3 лет</p>
             </div>
-            <div className="relative overflow-hidden rounded-2xl aspect-square group fade-in-on-scroll">
-              <img 
-                src="https://cdn.poehali.dev/projects/be5faa2d-5c70-480e-8c34-7a9bc9fce1e3/files/0ea8f3cd-08da-4968-95f8-a649da7b9594.jpg"
-                alt="Работа 2"
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-4 left-4 text-white">
-                  <p className="font-semibold">Довольные клиенты</p>
-                </div>
-              </div>
+            <div>
+              <p className="text-5xl font-black bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-3">
+                20 000+
+              </p>
+              <p className="text-gray-400">Проданных товаров</p>
             </div>
-            <div className="relative overflow-hidden rounded-2xl aspect-square group fade-in-on-scroll">
-              <img 
-                src="https://cdn.poehali.dev/projects/be5faa2d-5c70-480e-8c34-7a9bc9fce1e3/files/a317ebbf-25eb-42e0-a823-4ff433c0e10c.jpg"
-                alt="Работа 3"
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-4 left-4 text-white">
-                  <p className="font-semibold">3D эффект</p>
-                </div>
-              </div>
+            <div>
+              <p className="text-5xl font-black bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-3">
+                4.7/5
+              </p>
+              <p className="text-gray-400">Средняя оценка</p>
+            </div>
+            <div>
+              <a 
+                href="https://www.wildberries.ru/brands/310698810-ildamn" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block"
+              >
+                <Button variant="outline" className="border-purple-600 text-purple-400 hover:bg-purple-600/10">
+                  <Icon name="Store" className="mr-2" size={20} />
+                  Наш магазин на WB
+                </Button>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-500">
-        <div className="container mx-auto max-w-4xl text-center text-white fade-in-on-scroll">
-          <h3 className="text-4xl lg:text-5xl font-bold mb-6">
-            Есть вопросы?
-          </h3>
-          <p className="text-xl mb-8 opacity-90">
-            Напишите нашему менеджеру в Telegram — ответим в течение 5 минут
-          </p>
-          <Button 
-            size="lg"
-            onClick={() => window.open('https://t.me/customLGHT', '_blank')}
-            className="bg-white text-purple-600 hover:bg-gray-100 font-semibold text-lg px-10 py-6"
-          >
-            <Icon name="Send" className="mr-2" size={20} />
-            Написать @customLGHT
-          </Button>
-          <p className="mt-6 text-sm opacity-80">
-            Работаем ежедневно с 10:00 до 22:00 МСК
-          </p>
-        </div>
-      </section>
-
-      <footer className="bg-gray-900 text-white py-12 px-4">
+      <footer className="bg-zinc-950 text-white py-16 px-4 border-t border-zinc-800">
         <div className="container mx-auto max-w-7xl">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-3 gap-12 mb-12">
             <div>
-              <h4 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h4 className="text-3xl font-black mb-4">
                 ildamn
               </h4>
-              <p className="text-gray-400">
+              <p className="text-gray-400 leading-relaxed">
                 Создаём персональные подарки с 2021 года. Более 20 000 довольных клиентов.
               </p>
             </div>
             <div>
-              <h5 className="font-semibold mb-4 text-lg">Контакты</h5>
-              <div className="space-y-2 text-gray-400">
-                <p className="flex items-center gap-2">
-                  <Icon name="Send" size={16} />
-                  <a href="https://t.me/customLGHT" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">
+              <h5 className="font-bold mb-4 text-lg">Контакты</h5>
+              <div className="space-y-3 text-gray-400">
+                <p className="flex items-center gap-3">
+                  <Icon name="Send" size={18} />
+                  <a 
+                    href="https://t.me/customLGHT" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="hover:text-purple-400 transition-colors"
+                  >
                     @customLGHT
                   </a>
                 </p>
               </div>
             </div>
             <div>
-              <h5 className="font-semibold mb-4 text-lg">Маркетплейсы</h5>
-              <div className="space-y-2">
-                <p className="text-gray-400">
-                  <Icon name="Store" className="inline mr-2" size={16} />
-                  Wildberries: ildamn
-                </p>
-                <p className="text-gray-400">
-                  <Icon name="Store" className="inline mr-2" size={16} />
-                  Ozon: ildamn
+              <h5 className="font-bold mb-4 text-lg">Маркетплейсы</h5>
+              <div className="space-y-3">
+                <p className="text-gray-400 flex items-center gap-3">
+                  <Icon name="Store" size={18} />
+                  <a 
+                    href="https://www.wildberries.ru/brands/310698810-ildamn" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-purple-400 transition-colors"
+                  >
+                    Wildberries / Ozon
+                  </a>
                 </p>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
+          <div className="border-t border-zinc-800 pt-8 text-center text-gray-400 text-sm">
             <p>© 2025 ildamn. Все права защищены.</p>
           </div>
         </div>
