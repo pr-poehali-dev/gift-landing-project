@@ -196,10 +196,10 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="min-h-screen flex items-center pt-20 bg-white">
+      <section className="min-h-screen flex items-center py-20 bg-white">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8 animate-fade-in">
+            <div className="space-y-6 animate-fade-in">
               <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 text-lg px-6 py-2">
                 Более 20 000 проданных товаров
               </Badge>
@@ -215,11 +215,11 @@ const Index = () => {
                 Индивидуальные подарки ручной работы с вашим дизайном
               </p>
               
-              <div className="pt-4">
+              <div>
                 <CountdownTimer />
               </div>
 
-              <div className="pt-6 space-y-4">
+              <div className="space-y-4">
                 <Button 
                   size="lg"
                   onClick={() => window.open('https://t.me/customLGHT', '_blank')}
@@ -233,7 +233,7 @@ const Index = () => {
                 </p>
               </div>
 
-              <div className="flex items-center gap-6 pt-4">
+              <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   {[...Array(5)].map((_, i) => (
                     <Icon key={i} name="Star" className="text-yellow-400 fill-yellow-400" size={20} />
